@@ -123,78 +123,76 @@
   function generatePalette(mainColor, options={}){
     const baseHex = normalizeHex(mainColor);
     if(!baseHex){
-      throw new Error('Укажите корректный HEX-код основного цвета (например, #6B5B95).');
+      throw new Error('Укажите корректный HEX основного цвета (например, #FFB870).');
     }
 
-    const baseHsl = rgbToHsl(hexToRgb(baseHex));
+    const dominantHsl = rgbToHsl(hexToRgb(baseHex));
+    const brightenRatio = clamp(0.18 + (0.5 - dominantHsl.l) * 0.35, 0.08, 0.38);
+    const baseSurface = mixColors(baseHex, '#FFFFFF', brightenRatio);
 
-    const primary = baseHex;
-    const secondary = adjustHsl(baseHsl, {
-      h:(baseHsl.h + 30) % 360,
-      s:clamp(baseHsl.s * 0.75 + 0.1, 0, 1),
-      l:clamp(baseHsl.l * 0.9 + 0.08, 0.2, 0.8)
-    });
-    const accent = adjustHsl(baseHsl, {
-      h:(baseHsl.h + 200) % 360,
-      s:clamp(0.55 + baseHsl.s * 0.25, 0, 1),
-      l:clamp(0.45 + (0.5 - baseHsl.l) * 0.35, 0.25, 0.75)
-    });
+    const secondaryShift = dominantHsl.h >= 35 && dominantHsl.h <= 220 ? 28 : -26;
+    const secondaryHue = normalizeHue(dominantHsl.h + secondaryShift);
+    const secondaryS = clamp(dominantHsl.s * 0.72 + 0.1, 0.2, 0.78);
+    const secondaryL = clamp(dominantHsl.l * 0.85 + 0.12, 0.28, 0.8);
+    const secondaryTone = hslToHex({h:secondaryHue, s:secondaryS, l:secondaryL});
 
-    const background = mixColors('#FFFFFF', primary, 0.12);
-    const card = mixColors(background, '#FFFFFF', 0.7);
-    const neutral = mixColors(background, '#1F1B24', 0.12);
+    const accentHue = normalizeHue(dominantHsl.h + 180);
+    const accentS = clamp(Math.max(dominantHsl.s, 0.45) + 0.18, 0.55, 0.95);
+    const accentL = clamp(0.56 - (dominantHsl.l - 0.5) * 0.45, 0.34, 0.62);
+    const accentTone = hslToHex({h:accentHue, s:accentS, l:accentL});
 
-    const backgroundHsl = rgbToHsl(hexToRgb(background));
-    const text = backgroundHsl.l > 0.6 ? '#1F1D2A' : '#F7F7FA';
+    const baseSurfaceHsl = rgbToHsl(hexToRgb(baseSurface));
+    const neutral = baseSurfaceHsl.l > 0.58
+      ? '#1F1A27'
+      : mixColors('#FFFFFF', baseSurface, 0.82);
 
-    const buttonBg = mixColors(primary, '#1A1A1A', 0.18);
-    const buttonHover = mixColors(buttonBg, '#FFFFFF', 0.18);
-    const headerBg = mixColors(primary, secondary, 0.5);
-
-    const warm = mixColors(accent, '#FFFFFF', 0.15);
-    const warm2 = mixColors(accent, background, 0.65);
-    const border = mixColors(neutral, text, 0.4);
+    const cardSurface = mixColors(baseSurface, secondaryTone, 0.24);
+    const mutedSurface = mixColors(secondaryTone, '#FFFFFF', clamp(brightenRatio + 0.18, 0.3, 0.55));
+    const heroSurface = mixColors(secondaryTone, accentTone, 0.42);
+    const accentSurface = mixColors(secondaryTone, neutral, 0.2);
+    const border = mixColors(secondaryTone, neutral, 0.18);
+    const actionPrimary = mixColors(accentTone, neutral, baseSurfaceHsl.l > 0.6 ? 0.16 : 0.26);
+    const actionHover = mixColors(actionPrimary, '#FFFFFF', 0.1);
+    const mutedText = mixColors(neutral, baseSurface, 0.42);
+    const badge = mixColors(secondaryTone, '#FFFFFF', 0.48);
 
     const tokens = {
-      '--bg':background,
-      '--text':text,
-      '--accent1':primary,
-      '--accent2':secondary,
-      '--warm':warm,
-      '--warm2':warm2,
-      '--button':buttonBg,
-      '--button-hover':buttonHover,
-      '--neutral':neutral,
-      '--card-bg':card
+      '--color-base':baseSurface,
+      '--color-secondary':secondaryTone,
+      '--color-accent':accentTone,
+      '--color-neutral':neutral
     };
 
     const aliases = {
-      '--surface-primary':{mode:'base', ref:'--bg'},
-      '--surface-card':{mode:'base', ref:'--card-bg'},
-      '--surface-muted':{mode:'custom', value:neutral},
-      '--surface-hero':{mode:'custom', value:headerBg},
-      '--surface-accent':{mode:'base', ref:'--accent1'},
-      '--text-strong':{mode:'base', ref:'--text'},
-      '--text-muted':{mode:'auto'},
+      '--surface-primary':{mode:'base', ref:'--color-base'},
+      '--surface-card':{mode:'custom', value:cardSurface},
+      '--surface-muted':{mode:'custom', value:mutedSurface},
+      '--surface-hero':{mode:'custom', value:heroSurface},
+      '--surface-accent':{mode:'custom', value:accentSurface},
+      '--text-strong':{mode:'base', ref:'--color-neutral'},
+      '--text-muted':{mode:'custom', value:mutedText},
       '--border-subtle':{mode:'custom', value:border},
-      '--action-primary':{mode:'base', ref:'--button'},
-      '--action-primary-hover':{mode:'base', ref:'--button-hover'},
-      '--badge-accent':{mode:'base', ref:'--warm'}
+      '--action-primary':{mode:'custom', value:actionPrimary},
+      '--action-primary-hover':{mode:'custom', value:actionHover},
+      '--badge-accent':{mode:'custom', value:badge}
     };
 
-    const fonts = pickFontMeta(baseHsl);
+    const fonts = pickFontMeta(dominantHsl);
 
     const profile = {
-      primary,
-      secondary,
-      accent:warm,
-      background,
+      dominant:baseHex,
+      base:baseSurface,
+      secondary:secondaryTone,
+      accent:accentTone,
       neutral,
-      card,
-      text,
-      buttonBg,
-      buttonHover,
-      headerBg,
+      muted:mutedSurface,
+      action:actionPrimary,
+      hero:heroSurface,
+      ratio:{
+        primary:baseSurface,
+        secondary:mutedSurface,
+        accent:actionPrimary
+      },
       fonts:{
         main:fonts.text.family,
         heading:fonts.heading.family,
@@ -210,7 +208,8 @@
       meta:{
         strategy:'60-30-10',
         distribution:{primary:60, secondary:30, accent:10},
-        source:'PaletteGenerator'
+        source:'PaletteGenerator',
+        input:baseHex
       }
     };
   }
@@ -232,11 +231,12 @@
     return {...font};
   }
 
-  function adjustHsl(base, overrides){
-    const h = typeof overrides.h === 'number' ? overrides.h : base.h;
-    const s = typeof overrides.s === 'number' ? overrides.s : base.s;
-    const l = typeof overrides.l === 'number' ? overrides.l : base.l;
-    return hslToHex({h, s, l});
+  function normalizeHue(value){
+    let hue = value % 360;
+    if(hue < 0){
+      hue += 360;
+    }
+    return hue;
   }
 
   function normalizeHex(hex){
