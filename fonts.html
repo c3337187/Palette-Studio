@@ -348,6 +348,12 @@
       ui:'UI элементы'
     };
 
+    const ROLE_GUIDE = {
+      heading:'Роль: H1–H4, hero-заголовки и крупные CTA. Требования: выразительное начертание с поддержкой кириллицы, веса 600–800 для акцентов, допустимо лёгкое брендирование.',
+      text:'Роль: параграфы, описания, длинный контент. Требования: высокая читабельность при кегле 14–18 px, веса 400–500, умеренный контраст штрихов.',
+      ui:'Роль: кнопки, навигация, бейджи и метки. Требования: устойчивое начертание, хорошо смотрится в верхнем регистре, веса 500–700, чёткие цифры и символы.'
+    };
+
     const FONT_REGISTRY = {};
     RAW_FONTS.forEach(registerFont);
 
@@ -563,16 +569,20 @@
     }
 
     function updateMeta(){
-      headingMeta.textContent = describeFont(fonts.heading);
-      bodyMeta.textContent = describeFont(fonts.text);
-      uiMeta.textContent = describeFont(fonts.ui);
+      headingMeta.textContent = describeFont('heading', fonts.heading);
+      headingMeta.title = ROLE_GUIDE.heading;
+      bodyMeta.textContent = describeFont('text', fonts.text);
+      bodyMeta.title = ROLE_GUIDE.text;
+      uiMeta.textContent = describeFont('ui', fonts.ui);
+      uiMeta.title = ROLE_GUIDE.ui;
     }
 
-    function describeFont(id){
+    function describeFont(role, id){
       const font = FONT_REGISTRY[id];
-      if(!font) return id;
+      const guide = ROLE_GUIDE[role] || '';
+      if(!font) return guide ? `${id}. ${guide}` : id;
       const label = CATEGORY_LABELS[font.category] || font.category;
-      return `${font.family} • ${label}`;
+      return guide ? `${font.family} • ${label}. ${guide}` : `${font.family} • ${label}`;
     }
 
     function showStatus(text){
@@ -593,41 +603,6 @@
         ui:serializeFont(fonts.ui)
       };
       localStorage.setItem(FONT_KEY, JSON.stringify(payload));
-    }
-
-    function loadFonts(){
-      try{
-        const raw = localStorage.getItem(FONT_KEY);
-        if(!raw) return {...DEFAULT_FONTS};
-        const parsed = JSON.parse(raw);
-        if(typeof parsed === 'object' && parsed !== null && typeof parsed.heading !== 'string'){
-          return {
-            heading: normalizeStoredFont(parsed.heading, DEFAULT_FONTS.heading),
-            text: normalizeStoredFont(parsed.text, DEFAULT_FONTS.text),
-            ui: normalizeStoredFont(parsed.ui, DEFAULT_FONTS.ui)
-          };
-        }
-        return {
-          heading: FONT_REGISTRY[parsed.heading]?parsed.heading:DEFAULT_FONTS.heading,
-          text: FONT_REGISTRY[parsed.text]?parsed.text:DEFAULT_FONTS.text,
-          ui: FONT_REGISTRY[parsed.ui]?parsed.ui:DEFAULT_FONTS.ui
-        };
-      }catch(e){
-        return {...DEFAULT_FONTS};
-      }
-    }
-
-    function applyFonts(fonts){
-      const root = document.documentElement;
-      ['heading','text','ui'].forEach(key=>{
-        const id = fonts[key];
-        const fallbackId = DEFAULT_FONTS[key] || DEFAULT_FONTS.heading;
-        const font = FONT_REGISTRY[id] || FONT_REGISTRY[fallbackId];
-        if(font){
-          ensureFontLoaded(font);
-          root.style.setProperty(key==='heading'?'--font-heading':key==='text'?'--font-body':'--font-ui', font.stack);
-        }
-      });
     }
 
     function getOrderedFonts(){

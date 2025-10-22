@@ -1,0 +1,48 @@
+{
+  "activeId": "balanced-mauve",
+  "profiles": [
+    {
+      "id": "balanced-mauve",
+      "name": "Balanced Mauve",
+      "base": {
+        "--color-base": "#F5F3FA",
+        "--color-secondary": "#D6CFFE",
+        "--color-accent": "#FFB870",
+        "--color-neutral": "#2F2537"
+      },
+      "aliases": {
+        "--surface-primary": { "mode": "base", "ref": "--color-base" },
+        "--surface-card": { "mode": "auto" },
+        "--surface-muted": { "mode": "auto" },
+        "--surface-hero": { "mode": "auto" },
+        "--surface-accent": { "mode": "auto" },
+        "--text-strong": { "mode": "base", "ref": "--color-neutral" },
+        "--text-muted": { "mode": "auto" },
+        "--border-subtle": { "mode": "auto" },
+        "--action-primary": { "mode": "auto" },
+        "--action-primary-hover": { "mode": "auto" },
+        "--badge-accent": { "mode": "auto" }
+      }
+    }
+  ],
+  "fonts": {
+    "heading": {
+      "id": "manrope",
+      "family": "Manrope",
+      "stack": "'Manrope', sans-serif",
+      "css": "https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap&subset=cyrillic"
+    },
+    "text": {
+      "id": "inter",
+      "family": "Inter",
+      "stack": "'Inter', sans-serif",
+      "css": "https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap&subset=cyrillic"
+    },
+    "ui": {
+      "id": "manrope",
+      "family": "Manrope",
+      "stack": "'Manrope', sans-serif",
+      "css": "https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap&subset=cyrillic"
+    }
+  }
+}
