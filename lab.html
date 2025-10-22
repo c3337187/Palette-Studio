@@ -44,6 +44,21 @@
     .panel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
     .panel h2{margin:0;font-size:18px;font-family:var(--font-heading)}
     .panel p{margin:0;font-size:13px;color:var(--text-muted)}
+    .preset-catalog{display:flex;flex-direction:column;gap:12px}
+    .preset-catalog h3{margin:0;font-size:14px;font-family:var(--font-heading);text-transform:uppercase;letter-spacing:0.08em;color:color-mix(in srgb,var(--color-neutral) 82%, white 18%)}
+    .preset-note{margin:0;font-size:12px;color:var(--text-muted)}
+    .preset-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+    .preset-card{display:flex;flex-direction:column;gap:10px;padding:14px;border-radius:14px;background:var(--surface-muted);border:1px solid rgba(0,0,0,0.05);transition:border .2s,box-shadow .2s,background .2s}
+    .preset-card:hover{border-color:color-mix(in srgb,var(--color-secondary) 40%, transparent);box-shadow:0 8px 22px rgba(54,38,70,0.12)}
+    .preset-card.is-active{border-color:color-mix(in srgb,var(--action-primary) 45%, transparent);box-shadow:0 8px 24px color-mix(in srgb,var(--action-primary) 22%, transparent);background:color-mix(in srgb,var(--surface-card) 82%, var(--action-primary) 18%)}
+    .preset-title{font-size:13px;font-weight:600;font-family:var(--font-heading);color:var(--text-strong)}
+    .preset-desc{margin:0;font-size:12px;color:var(--text-muted);line-height:1.4}
+    .preset-swatches{display:flex;gap:6px}
+    .preset-swatch{flex:1;height:26px;border-radius:8px;border:1px solid rgba(0,0,0,0.08)}
+    .preset-tags{display:flex;flex-wrap:wrap;gap:6px}
+    .preset-tags span{padding:4px 8px;border-radius:999px;background:color-mix(in srgb,var(--surface-card) 80%, white 20%);color:color-mix(in srgb,var(--color-neutral) 70%, white 30%);font-size:10px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase}
+    .preset-apply{font-size:11px;text-transform:uppercase;letter-spacing:0.08em}
+    .panel-divider{height:1px;background:rgba(0,0,0,0.08);margin:4px 0 12px;border:none}
     .tab-switch{display:flex;gap:8px}
     .tab-button{padding:8px 14px;border-radius:12px;border:1px solid var(--border-subtle);background:var(--surface-card);font-size:12px;font-weight:600;color:var(--text-muted);cursor:pointer;transition:background .2s,color .2s,box-shadow .2s;font-family:var(--font-ui);text-transform:uppercase;letter-spacing:0.05em}
     .tab-button:hover{background:var(--surface-muted);color:var(--text-strong)}
@@ -57,6 +72,7 @@
     .btn{padding:8px 12px;border-radius:12px;border:1px solid var(--border-subtle);background:var(--surface-card);color:var(--text-strong);font-size:13px;font-family:var(--font-ui);cursor:pointer;transition:background .2s,box-shadow .2s}
     .btn:hover{background:var(--surface-muted)}
     .btn.danger{background:color-mix(in srgb,var(--color-accent) 18%, white);border-color:color-mix(in srgb,var(--color-accent) 28%, white);color:color-mix(in srgb,var(--color-accent) 60%, var(--color-neutral) 40%)}
+    .btn:disabled{opacity:0.55;cursor:not-allowed;box-shadow:none}
     .status{font-size:12px;color:var(--text-muted)}
     .token-controls{display:flex;flex-direction:column;gap:0}
     .token-row{display:grid;grid-template-columns:150px 1fr;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(0,0,0,0.05)}
@@ -174,6 +190,14 @@
           <h2>Профили палитры</h2>
           <p>Создавайте, копируйте и настраивайте цветовые профили. Изменения сохраняются автоматически.</p>
         </div>
+        <div class="preset-catalog">
+          <div>
+            <h3>Стандарт</h3>
+            <p class="preset-note">10 трендовых профилей на базе аналитики 2024 года. Добавьте любой, чтобы сделать его активным и донастроить под проект.</p>
+          </div>
+          <div class="preset-grid" id="presetGrid"></div>
+        </div>
+        <div class="panel-divider" aria-hidden="true"></div>
         <div class="profile-select">
           <label style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:color-mix(in srgb,var(--color-neutral) 85%, white 15%)">Активный профиль</label>
           <select id="profileSelect"></select>
@@ -372,6 +396,7 @@
       mixColors,
       normalizeHex,
       normalizeProfile,
+      getStandardPresets,
       randomId,
       clone
     } = PaletteStore;
@@ -415,6 +440,7 @@
     const contrastList = document.getElementById('contrastList');
     const notice = document.getElementById('notice');
     const importInput = document.getElementById('importInput');
+    const presetGrid = document.getElementById('presetGrid');
     const generatorColor = document.getElementById('generatorColor');
     const generatorHex = document.getElementById('generatorHex');
     const generatorName = document.getElementById('generatorName');
@@ -438,6 +464,8 @@
 
     let state = loadState();
     let activeProfile = state.profiles.find(p=>p.id===state.activeId) || state.profiles[0];
+    const standardPresets = getStandardPresets();
+    const aliasKeys = ALIAS_DEFS.map(def=>def.variable);
 
     let fonts = loadFonts();
     applyFonts(fonts);
@@ -449,6 +477,7 @@
     buildBaseControls();
     renderAliasControls();
     renderPreview();
+    renderPresetCatalog();
 
     profileSelect.addEventListener('change', e=>{
       setActiveProfile(e.target.value);
@@ -473,6 +502,7 @@
       saveState();
       initProfileSelect();
       renderPreview();
+      renderPresetCatalog();
       showStatus('Название обновлено');
     });
 
@@ -491,6 +521,7 @@
       buildBaseControls();
       renderAliasControls();
       renderPreview();
+      renderPresetCatalog();
       showStatus('Профиль удалён');
     });
 
@@ -509,6 +540,7 @@
       buildBaseControls();
       renderAliasControls();
       renderPreview();
+      renderPresetCatalog();
       showStatus('Список профилей очищен');
       showNotice('Оставлен только профиль main');
     });
@@ -521,6 +553,7 @@
       buildBaseControls();
       renderAliasControls();
       renderPreview();
+      renderPresetCatalog();
       showStatus('Цвета сброшены к умолчанию');
     });
 
@@ -619,6 +652,7 @@
       buildBaseControls();
       renderAliasControls();
       renderPreview();
+      renderPresetCatalog();
 
       const fontsApplied = applyFontPayload(payload.fonts);
       const statusParts = [];
@@ -894,6 +928,7 @@
       saveState();
       renderAliasControls();
       renderPreview();
+      renderPresetCatalog();
       showStatus('Alias обновлён');
     }
 
@@ -902,6 +937,7 @@
       saveState();
       renderAliasControls();
       renderPreview();
+      renderPresetCatalog();
       showStatus('Цвет сохранён');
     }
 
@@ -909,6 +945,91 @@
       previewProfile.textContent = activeProfile.name;
       updateRatioPreview();
       updateContrast();
+    }
+
+    function renderPresetCatalog(){
+      if(!presetGrid) return;
+      presetGrid.innerHTML='';
+      const normalizedActive = activeProfile ? normalizeProfile(activeProfile) : null;
+      const activeResolved = normalizedActive ? resolveAliases(normalizedActive) : null;
+
+      standardPresets.forEach(preset=>{
+        const card = document.createElement('article');
+        card.className = 'preset-card';
+
+        const title = document.createElement('div');
+        title.className = 'preset-title';
+        title.textContent = preset.name;
+        card.appendChild(title);
+
+        const resolvedPreset = resolveAliases(preset.profile);
+        const swatches = document.createElement('div');
+        swatches.className = 'preset-swatches';
+        [
+          preset.profile.base['--color-base'],
+          preset.profile.base['--color-secondary'],
+          preset.profile.base['--color-accent'],
+          resolvedPreset['--action-primary']
+        ].forEach(color=>{
+          const swatch = document.createElement('span');
+          swatch.className = 'preset-swatch';
+          swatch.style.background = color;
+          swatch.title = color;
+          swatch.style.color = getReadableTextColor(color);
+          swatches.appendChild(swatch);
+        });
+        card.appendChild(swatches);
+
+        if(preset.tags && preset.tags.length){
+          const tagsWrap = document.createElement('div');
+          tagsWrap.className = 'preset-tags';
+          preset.tags.forEach(tag=>{
+            const tagNode = document.createElement('span');
+            tagNode.textContent = tag;
+            tagsWrap.appendChild(tagNode);
+          });
+          card.appendChild(tagsWrap);
+        }
+
+        if(preset.description){
+          const desc = document.createElement('p');
+          desc.className = 'preset-desc';
+          desc.textContent = preset.description;
+          card.appendChild(desc);
+        }
+
+        const action = document.createElement('button');
+        action.type = 'button';
+        action.className = 'btn preset-apply';
+        action.textContent = 'Добавить в профили';
+        action.addEventListener('click', ()=>{
+          const instance = cloneProfile(preset.profile);
+          instance.id = generateUniqueId(`std-${preset.id}`);
+          instance.name = preset.name;
+          state.profiles.push(instance);
+          setActiveProfile(instance.id);
+          initProfileSelect();
+          showStatus(`Профиль «${preset.name}» добавлен из каталога.`);
+          showNotice(`Активирован «${preset.name}».`);
+        });
+        card.appendChild(action);
+
+        const isActive = normalizedActive
+          && BASE_TOKENS.every(token=>normalizedActive.base[token.variable] === preset.profile.base[token.variable])
+          && aliasKeys.every(key=>{
+            const activeValue = activeResolved ? activeResolved[key] : '';
+            const presetValue = resolvedPreset[key] || '';
+            return activeValue === presetValue;
+          });
+
+        if(isActive){
+          card.classList.add('is-active');
+          action.textContent = 'Активен';
+          action.disabled = true;
+        }
+
+        presetGrid.appendChild(card);
+      });
     }
 
     function updateRatioPreview(){
@@ -1012,6 +1133,7 @@
       buildBaseControls();
       renderAliasControls();
       renderPreview();
+      renderPresetCatalog();
     }
 
     function saveState(){
