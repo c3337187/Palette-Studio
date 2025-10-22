@@ -2,10 +2,34 @@
   const STORAGE_KEY = 'palette-studio-profiles';
 
   const BASE_TOKENS = [
-    {variable:'--color-base', label:'Базовый фон', description:'Основная поверхность и большие секции (≈60%).', usage:['Фон','Hero','Секции'], default:'#F5F3FA'},
-    {variable:'--color-secondary', label:'Вторичный цвет', description:'Карточки, блоки и подложки (≈30%).', usage:['Карточки','Подложки'], default:'#D6CFFE'},
-    {variable:'--color-accent', label:'Акцентный цвет', description:'CTA, ссылки и бейджи (≈10%).', usage:['CTA','Ссылки','Бейджи'], default:'#FFB870'},
-    {variable:'--color-neutral', label:'Нейтральный тёмный', description:'Текст, иконки и сильный контент.', usage:['Текст','Иконки'], default:'#2F2537'}
+    {
+      variable:'--color-base',
+      label:'Базовый фон',
+      description:'Тон, задающий доминирующий фон (≈60%) и служащий источником для --surface-primary. Должен быть самым светлым из базовых цветов, чтобы обеспечивать контраст 4.5:1 с основным текстом.',
+      usage:['Фон','Hero','Секции'],
+      default:'#F5F3FA'
+    },
+    {
+      variable:'--color-secondary',
+      label:'Вторичный цвет',
+      description:'Оттенок для второго слоя (≈30%), используемый в --surface-card, --surface-muted, --surface-hero и --surface-accent. Выбирайте его чуть глубже базового фона, чтобы строить иерархию между блоками.',
+      usage:['Карточки','Подложки'],
+      default:'#D6CFFE'
+    },
+    {
+      variable:'--color-accent',
+      label:'Акцентный цвет',
+      description:'Активные элементы и микровзаимодействия (≈10%). На его основе генерируются --action-primary, состояния hover и часть hero-градиента, поэтому оттенок должен оставаться читаемым на светлом и тёмном фоне.',
+      usage:['CTA','Ссылки','Бейджи'],
+      default:'#FFB870'
+    },
+    {
+      variable:'--color-neutral',
+      label:'Нейтральный тёмный',
+      description:'Главный цвет текста, иконок и контрастных элементов. Формирует --text-strong и влияет на подмешивание во вторичные состояния, поэтому выбирайте насыщенный, но не кричащий тон.',
+      usage:['Текст','Иконки'],
+      default:'#2F2537'
+    }
   ];
 
   function mixColors(hexA, hexB, weightB){
@@ -22,17 +46,147 @@
   }
 
   const ALIAS_DEFS = [
-    {variable:'--surface-primary', label:'Поверхность основная', description:'Главный фон интерфейса.', defaultConfig:()=>({mode:'base', ref:'--color-base'})},
-    {variable:'--surface-card', label:'Поверхность карточек', description:'Карточки и блоки.', defaultConfig:()=>({mode:'auto'}), auto:(base)=>mixColors(base['--color-base'], '#FFFFFF', 0.15)},
-    {variable:'--surface-muted', label:'Поверхность приглушённая', description:'Вторичные подложки.', defaultConfig:()=>({mode:'auto'}), auto:(base)=>mixColors(base['--color-secondary'], '#FFFFFF', 0.65)},
-    {variable:'--surface-hero', label:'Hero-поверхность', description:'Градиенты и крупные баннеры.', defaultConfig:()=>({mode:'auto'}), auto:(base)=>mixColors(base['--color-secondary'], base['--color-accent'], 0.4)},
-    {variable:'--surface-accent', label:'Акцентная поверхность', description:'Выделенные блоки.', defaultConfig:()=>({mode:'auto'}), auto:(base)=>mixColors(base['--color-secondary'], base['--color-neutral'], 0.3)},
-    {variable:'--text-strong', label:'Текст сильный', description:'Основной текст и заголовки.', defaultConfig:()=>({mode:'base', ref:'--color-neutral'})},
-    {variable:'--text-muted', label:'Текст вторичный', description:'Подписи и пояснения.', defaultConfig:()=>({mode:'auto'}), auto:(base, alias)=>mixColors(base['--color-neutral'], alias['--surface-primary'] || base['--color-base'], 0.42)},
-    {variable:'--border-subtle', label:'Границы мягкие', description:'Рамки и разделители.', defaultConfig:()=>({mode:'auto'}), auto:(base)=>mixColors(base['--color-secondary'], base['--color-neutral'], 0.12)},
-    {variable:'--action-primary', label:'Primary action', description:'Основной CTA.', defaultConfig:()=>({mode:'auto'}), auto:(base)=>mixColors(base['--color-accent'], base['--color-neutral'], 0.18)},
-    {variable:'--action-primary-hover', label:'Primary hover', description:'Hover/active для CTA.', defaultConfig:()=>({mode:'auto'}), auto:(base, alias)=>mixColors(alias['--action-primary'] || mixColors(base['--color-accent'], base['--color-neutral'], 0.18), '#FFFFFF', 0.08)},
-    {variable:'--badge-accent', label:'Цвет бейджа', description:'Теги и небольшие акценты.', defaultConfig:()=>({mode:'auto'}), auto:(base)=>mixColors(base['--color-secondary'], '#FFFFFF', 0.45)}
+    {
+      variable:'--surface-primary',
+      label:'Поверхность основная',
+      description:'Главный фон интерфейса и стартовая точка для контрастов.',
+      info:[
+        'Что это: фон-основа для страницы, крупных секций и общих контейнеров.',
+        'Как сочетается: должна быть самой светлой поверхностью; держите её светлее --surface-card минимум на 8–10% по яркости и значительно светлее --surface-muted, чтобы текст (--text-strong) стабильно достигал контраста ≥ 4.5:1.',
+        'Как настроить: в светлой теме берите оттенок из --color-base, в тёмной — выбирайте самый светлый тон палитры и оставляйте лёгкий брендовый подтон, чтобы фон не выглядел серым.',
+        'Пример: основной фон дашборда, на котором лежат карточки и hero-блок; за счёт разницы яркости они считываются отдельными слоями.'
+      ].join('\n\n'),
+      defaultConfig:()=>({mode:'base', ref:'--color-base'})
+    },
+    {
+      variable:'--surface-card',
+      label:'Поверхность карточек',
+      description:'Основные контейнеры контента и модальные блоки.',
+      info:[
+        'Что это: фон для карточек, модальных окон, форм, панелей настроек.',
+        'Как сочетается: делайте её на шаг темнее или насыщеннее, чем --surface-primary (разница яркости 6–12%), чтобы блоки читались отдельными слоями, но всё ещё давали контраст ≥ 4.5:1 с --text-strong. Поддерживайте связь с --surface-muted, чтобы состояния hover выглядели родственно.',
+        'Как настроить: используйте --color-secondary, смягчённый белым или нейтральным, и проверяйте, что оттенок не конкурирует по силе с --surface-accent и --action-primary.',
+        'Пример: карточка анонса, окно авторизации или плитка товара — слегка более плотная подложка помогает отделить содержимое от общего фона.'
+      ].join('\n\n'),
+      defaultConfig:()=>({mode:'auto'}),
+      auto:(base)=>mixColors(base['--color-base'], '#FFFFFF', 0.15)
+    },
+    {
+      variable:'--surface-muted',
+      label:'Поверхность приглушённая',
+      description:'Вторичные слои и состояния наведения.',
+      info:[
+        'Что это: мягкая подложка для состояний наведения, вторичных панелей, фильтров.',
+        'Как сочетается: ощутимо темнее, чем --surface-card, но светлее и спокойнее, чем --surface-accent и --action-primary, чтобы внимание усиливалось без конкуренции с CTA. Контраст с --text-muted может быть около 3:1, а с --text-strong ≥ 4.5:1 по необходимости.',
+        'Как настроить: смешайте --color-secondary с белым или нейтральным, оставляя заметную связь с карточками и героем.',
+        'Пример: фон строки списка при наведении, боковая панель фильтров, вторичная карточка внутри сетки.'
+      ].join('\n\n'),
+      defaultConfig:()=>({mode:'auto'}),
+      auto:(base)=>mixColors(base['--color-secondary'], '#FFFFFF', 0.65)
+    },
+    {
+      variable:'--surface-hero',
+      label:'Hero-поверхность',
+      description:'Фон для крупных баннеров, hero-блоков и витрин.',
+      info:[
+        'Что это: декоративная поверхность для витрины, hero-разделов, больших баннеров.',
+        'Как сочетается: собирает воедино --color-secondary и --color-accent, оставаясь чуть светлее --action-primary, чтобы CTA не терялся, и обеспечивая контраст ≥ 4.5:1 с белым текстом и элементами.',
+        'Как настроить: используйте насыщенный градиент или плотный микс без выбеленных участков, чтобы блок ощущался самостоятельным слоем и не дублировал --surface-card.',
+        'Пример: верхний баннер лендинга с призывом к действию или hero-иллюстрацией.'
+      ].join('\n\n'),
+      defaultConfig:()=>({mode:'auto'}),
+      auto:(base)=>mixColors(base['--color-secondary'], base['--color-accent'], 0.4)
+    },
+    {
+      variable:'--surface-accent',
+      label:'Акцентная поверхность',
+      description:'Секции с повышенной важностью и маркетинговые блоки.',
+      info:[
+        'Что это: фон для выделенных секций, маркетинговых блоков, onboarding-элементов.',
+        'Как сочетается: по насыщенности занимает место между --surface-muted и --action-primary. Контраст с белым текстом держите ≥ 4.5:1, а при тёмном тексте проверяйте ≥ 3:1.',
+        'Как настроить: смешивайте --color-secondary с небольшим количеством --color-neutral, чтобы добавить глубины и отличить блок от карточек, но не перекрыть внимание главной кнопки.',
+        'Пример: промо-блок с иллюстрацией, выделенная панель тарифов, onboarding-подсказка с иконкой.'
+      ].join('\n\n'),
+      defaultConfig:()=>({mode:'auto'}),
+      auto:(base)=>mixColors(base['--color-secondary'], base['--color-neutral'], 0.3)
+    },
+    {
+      variable:'--text-strong',
+      label:'Текст сильный',
+      description:'Главные заголовки и основной текст.',
+      info:[
+        'Что это: основной цвет текста для заголовков, параграфов, элементов интерфейса.',
+        'Как сочетается: обеспечивает контраст ≥ 7:1 для заголовков и ≥ 4.5:1 для параграфов по отношению к --surface-primary и --surface-card; на приглушённых поверхностях допускается ≥ 3:1 для вспомогательных элементов.',
+        'Как настроить: берите насыщенный нейтральный тон из --color-neutral, избегайте цветных оттенков, чтобы текст не воспринимался как ссылка или статус.',
+        'Пример: основной текст статей, заголовки карточек, подписи на кнопках и интерактивных элементах.'
+      ].join('\n\n'),
+      defaultConfig:()=>({mode:'base', ref:'--color-neutral'})
+    },
+    {
+      variable:'--text-muted',
+      label:'Текст вторичный',
+      description:'Подсказки, описания и служебные подписи.',
+      info:[
+        'Что это: цвет текста для подсказок, описаний, второстепенных меток.',
+        'Как сочетается: заметно светлее --text-strong и ближе к --surface-primary, чтобы визуально отходить на второй план; держите контраст ≥ 3:1 с поверхностями и ≥ 4.5:1, если текст несёт важную информацию.',
+        'Как настроить: смешивайте --color-neutral с --surface-primary или --surface-card (в тёмной теме — наоборот, затемняйте светлую базу), пока текст не станет мягким, но читаемым.',
+        'Пример: описание формы, вспомогательные подписи в карточках, метки времени или номера шагов.'
+      ].join('\n\n'),
+      defaultConfig:()=>({mode:'auto'}),
+      auto:(base, alias)=>mixColors(base['--color-neutral'], alias['--surface-primary'] || base['--color-base'], 0.42)
+    },
+    {
+      variable:'--border-subtle',
+      label:'Границы мягкие',
+      description:'Делители, рамки карточек и нейтральные контуры.',
+      info:[
+        'Что это: контуры и разделители, которые создают структуру без жёстких линий.',
+        'Как сочетается: чуть темнее или насыщеннее, чем --surface-card, но заметно мягче, чем акцентные границы. Опирается на --color-secondary с каплей --color-neutral, чтобы не выпадать из палитры.',
+        'Как настроить: используйте прозрачность или лёгкие миксы; проверяйте, что бордер остаётся различимым на --surface-primary и --surface-muted, но не перетягивает внимание.',
+        'Пример: рамка карточки, разделитель секций, контур полей ввода и таблиц.'
+      ].join('\n\n'),
+      defaultConfig:()=>({mode:'auto'}),
+      auto:(base)=>mixColors(base['--color-secondary'], base['--color-neutral'], 0.12)
+    },
+    {
+      variable:'--action-primary',
+      label:'Primary action',
+      description:'Главная кнопка и ключевые CTA.',
+      info:[
+        'Что это: основной цвет активных действий — главные кнопки, CTA, ключевые переключатели.',
+        'Как сочетается: самый насыщенный цвет после брендовых поверхностей. Держите контраст ≥ 4.5:1 с белым текстом и ≥ 3:1 с --surface-primary и --surface-card, чтобы элементы были заметны и доступны.',
+        'Как настроить: используйте --color-accent с примесью --color-neutral для глубины; убедитесь, что оттенок не совпадает с --surface-accent и не теряется на hero-поверхности.',
+        'Пример: кнопка «Купить», CTA в hero-блоке, основное действие в диалоге или форме.'
+      ].join('\n\n'),
+      defaultConfig:()=>({mode:'auto'}),
+      auto:(base)=>mixColors(base['--color-accent'], base['--color-neutral'], 0.18)
+    },
+    {
+      variable:'--action-primary-hover',
+      label:'Primary hover',
+      description:'Hover/active состояние CTA.',
+      info:[
+        'Что это: состояние наведения и нажатия для главных CTA.',
+        'Как сочетается: чуть светлее или теплее, чем --action-primary, чтобы подсветить интерактивность, сохраняя контраст ≥ 4.5:1 с текстом и поверхностью, на которой находится кнопка.',
+        'Как настроить: добавьте к --action-primary белый или светлую часть --surface-primary; убедитесь, что оттенок не уходит в серый и не конфликтует с --surface-accent.',
+        'Пример: состояние основной кнопки при наведении курсора, фокусе с клавиатуры или удержании.'
+      ].join('\n\n'),
+      defaultConfig:()=>({mode:'auto'}),
+      auto:(base, alias)=>mixColors(alias['--action-primary'] || mixColors(base['--color-accent'], base['--color-neutral'], 0.18), '#FFFFFF', 0.08)
+    },
+    {
+      variable:'--badge-accent',
+      label:'Цвет бейджа',
+      description:'Бейджи статусов, теги и счетчики.',
+      info:[
+        'Что это: фон для бейджей статуса, тегов, счётчиков уведомлений.',
+        'Как сочетается: светлее и мягче, чем --surface-muted, чтобы не спорить с контентом, но даёт достаточный контраст для текста бейджа (обычно --text-strong или белый). Не должен повторять тон --action-primary, иначе бейджи будут выглядеть как кнопки.',
+        'Как настроить: осветлите --color-secondary или --color-accent; регулируйте насыщенность, чтобы элементы оставались заметными на --surface-primary и --surface-card.',
+        'Пример: бейдж «Новая», индикатор статуса, счётчик уведомлений или тег в списке фильтров.'
+      ].join('\n\n'),
+      defaultConfig:()=>({mode:'auto'}),
+      auto:(base)=>mixColors(base['--color-secondary'], '#FFFFFF', 0.45)
+    }
   ];
 
   const RAW_DEFAULT_PROFILES = [
