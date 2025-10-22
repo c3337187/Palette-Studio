@@ -6,27 +6,24 @@
   <title>Цветовая палитра — стенд</title>
   <style>
     :root{
-      --bg:#FAF8FB;
-      --text:#3C2E40;
-      --accent1:#B188C2;
-      --accent2:#C9A3E6;
-      --warm:#EBC5D8;
-      --warm2:#F3DEE6;
-      --button:#8C66AF;
-      --button-hover:#A57FD0;
-      --neutral:#E9E5EC;
-      --card-bg:#FFFFFF;
-      --surface-primary:var(--bg);
-      --surface-card:var(--card-bg);
-      --surface-muted:var(--warm2);
-      --surface-hero:var(--accent2);
-      --surface-accent:var(--accent1);
-      --text-strong:var(--text);
-      --text-muted:color-mix(in srgb,var(--text) 60%,var(--surface-primary) 40%);
-      --border-subtle:var(--neutral);
-      --action-primary:var(--button);
-      --action-primary-hover:var(--button-hover);
-      --badge-accent:var(--warm);
+      --color-base:#F5F3FA;
+      --color-secondary:#D6CFFE;
+      --color-accent:#FFB870;
+      --color-neutral:#2F2537;
+      --surface-primary:var(--color-base);
+      --surface-card:color-mix(in srgb,var(--color-base) 85%, white 15%);
+      --surface-muted:color-mix(in srgb,var(--color-secondary) 35%, white);
+      --surface-hero:color-mix(in srgb,var(--color-secondary) 60%, var(--color-accent));
+      --surface-accent:color-mix(in srgb,var(--color-secondary) 70%, var(--color-neutral));
+      --text-strong:var(--color-neutral);
+      --text-muted:color-mix(in srgb,var(--color-neutral) 58%, var(--surface-primary) 42%);
+      --border-subtle:color-mix(in srgb,var(--color-secondary) 24%, var(--color-neutral));
+      --action-primary:color-mix(in srgb,var(--color-accent) 82%, var(--color-neutral));
+      --action-primary-hover:color-mix(in srgb,var(--color-accent) 92%, white 8%);
+      --badge-accent:color-mix(in srgb,var(--color-secondary) 55%, white);
+      --ratio-primary:var(--surface-primary);
+      --ratio-secondary:var(--surface-muted);
+      --ratio-accent:var(--action-primary);
       --font-heading:'Manrope', 'Inter', 'Segoe UI', system-ui, sans-serif;
       --font-body:'Inter', 'Segoe UI', system-ui, sans-serif;
       --font-ui:'Manrope', 'Inter', 'Segoe UI', system-ui, sans-serif;
@@ -36,7 +33,7 @@
     a{text-decoration:none;color:inherit}
     .topbar{background:rgba(255,255,255,0.82);backdrop-filter:blur(14px);border-bottom:1px solid rgba(0,0,0,0.06);position:sticky;top:0;z-index:10}
     .topbar .container{max-width:1200px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px}
-    .brand{font-weight:700;font-size:18px;letter-spacing:0.06em;text-transform:uppercase;color:#5C4C66}
+    .brand{font-weight:700;font-size:18px;letter-spacing:0.06em;text-transform:uppercase;color:color-mix(in srgb,var(--color-neutral) 85%, white 15%)}
     .nav-links{display:flex;gap:12px;font-size:14px}
     .nav-link{padding:8px 14px;border-radius:999px;color:var(--text-muted);transition:background .2s,color .2s}
     .nav-link:hover{background:var(--surface-muted);color:var(--text-strong)}
@@ -57,11 +54,11 @@
     .token-card{background:var(--surface-card);border-radius:18px;padding:20px;border:1px solid rgba(54,38,70,0.08);box-shadow:0 10px 30px rgba(54,38,70,0.08);display:flex;flex-direction:column;gap:12px}
     .token-card .swatch{height:88px;border-radius:12px;box-shadow:inset 0 -6px 18px rgba(0,0,0,0.05)}
     .token-card .meta{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--text-muted)}
-    .token-card .meta .var{font-family:monospace;color:#a18cb2;font-size:11px;margin-left:6px}
+    .token-card .meta .var{font-family:monospace;color:color-mix(in srgb,var(--color-secondary) 55%, var(--color-neutral) 45%);font-size:11px;margin-left:6px}
     .token-card .hex{font-family:monospace;font-weight:700}
     .token-card .desc{font-size:13px;color:var(--text-muted);line-height:1.5}
     .token-card .usage{display:flex;gap:8px;flex-wrap:wrap;font-size:12px}
-    .token-card .usage span{padding:6px 10px;border-radius:999px;background:var(--surface-muted);border:1px solid rgba(0,0,0,0.05);color:#5C4C66}
+    .token-card .usage span{padding:6px 10px;border-radius:999px;background:var(--surface-muted);border:1px solid rgba(0,0,0,0.05);color:color-mix(in srgb,var(--color-neutral) 82%, white 18%)}
     .component-section{display:flex;flex-direction:column;gap:32px}
     .component-card{background:var(--surface-card);padding:24px;border-radius:20px;border:1px solid rgba(54,38,70,0.08);box-shadow:0 12px 34px rgba(54,38,70,0.1);display:flex;flex-direction:column;gap:18px}
     .component-card header{display:flex;justify-content:space-between;align-items:center}
@@ -112,7 +109,7 @@
     .type-card{background:var(--surface-card);border-radius:16px;padding:20px;border:1px solid rgba(54,38,70,0.08);box-shadow:0 10px 26px rgba(54,38,70,0.08);display:flex;flex-direction:column;gap:12px}
     .type-card header{display:flex;justify-content:space-between;align-items:center}
     .type-card header h3{margin:0;font-size:16px;font-family:var(--font-heading)}
-    .type-card code{font-family:monospace;font-size:12px;color:#a18cb2}
+    .type-card code{font-family:monospace;font-size:12px;color:color-mix(in srgb,var(--color-secondary) 55%, var(--color-neutral) 45%)}
     .type-sample{font-size:28px;line-height:1.2}
     .type-meta{font-size:13px;color:var(--text-muted)}
     .copy-grid{display:flex;gap:8px;flex-wrap:wrap}
@@ -319,63 +316,45 @@
     const FONT_KEY = 'palette-studio-fonts';
 
     const BASE_TOKENS = [
-      {variable:'--bg', label:'Фон', description:'Основная поверхность и фон страниц.', usage:['Фон','Hero','Секции'], default:'#FAF8FB'},
-      {variable:'--text', label:'Основной текст', description:'Сильный текст и заголовки.', usage:['Заголовки','Текст'], default:'#3C2E40'},
-      {variable:'--accent1', label:'Акцент мягкий', description:'Вторичные акценты и выделения.', usage:['Акценты','Ссылки'], default:'#B188C2'},
-      {variable:'--accent2', label:'Акцент яркий', description:'Hero и ключевые CTA.', usage:['Hero','CTA'], default:'#C9A3E6'},
-      {variable:'--warm', label:'Тёплый акцент', description:'Бейджи, теги и мягкие подсветки.', usage:['Бейджи','Подложки'], default:'#EBC5D8'},
-      {variable:'--warm2', label:'Доп. тёплый', description:'Вторичные поверхности и фоны.', usage:['Фоны','Секции'], default:'#F3DEE6'},
-      {variable:'--button', label:'Кнопка', description:'Основной цвет кнопок и действий.', usage:['Primary CTA'], default:'#8C66AF'},
-      {variable:'--button-hover', label:'Кнопка (hover)', description:'Состояние наведения/активации.', usage:['Hover','Active'], default:'#A57FD0'},
-      {variable:'--neutral', label:'Нейтральный', description:'Границы, разделители, рамки.', usage:['Границы','Разделители'], default:'#E9E5EC'},
-      {variable:'--card-bg', label:'Фон карточек', description:'Карточки, попапы, модальные окна.', usage:['Карточки','Блоки'], default:'#FFFFFF'}
+      {variable:'--color-base', label:'Базовый фон', description:'Основная поверхность и большие секции (≈60%).', usage:['Фон','Hero','Секции'], default:'#F5F3FA'},
+      {variable:'--color-secondary', label:'Вторичный цвет', description:'Карточки, блоки и подложки (≈30%).', usage:['Карточки','Подложки'], default:'#D6CFFE'},
+      {variable:'--color-accent', label:'Акцентный цвет', description:'CTA, ссылки и бейджи (≈10%).', usage:['CTA','Ссылки','Бейджи'], default:'#FFB870'},
+      {variable:'--color-neutral', label:'Нейтральный тёмный', description:'Текст, иконки и сильный контент.', usage:['Текст','Иконки'], default:'#2F2537'}
     ];
 
     const ALIAS_DEFS = [
-      {variable:'--surface-primary', label:'Поверхность основная', description:'Главный фон интерфейса.', defaultConfig:()=>({mode:'base', ref:'--bg'})},
-      {variable:'--surface-card', label:'Поверхность карточек', description:'Карточки и блоки.', defaultConfig:()=>({mode:'base', ref:'--card-bg'})},
-      {variable:'--surface-muted', label:'Поверхность приглушённая', description:'Вторичные полосы и подложки.', defaultConfig:()=>({mode:'base', ref:'--warm2'})},
-      {variable:'--surface-hero', label:'Hero-поверхность', description:'Градиенты и крупные баннеры.', defaultConfig:()=>({mode:'base', ref:'--accent2'})},
-      {variable:'--surface-accent', label:'Акцентная поверхность', description:'Акцентные блоки и бейджи.', defaultConfig:()=>({mode:'base', ref:'--accent1'})},
-      {variable:'--text-strong', label:'Текст сильный', description:'Основной текст и заголовки.', defaultConfig:()=>({mode:'base', ref:'--text'})},
-      {variable:'--text-muted', label:'Текст вторичный', description:'Подписи и пояснения.', defaultConfig:()=>({mode:'auto'}), auto:(base, alias)=>mixColors(base['--text'], alias['--surface-primary'] || base['--bg'], 0.4)},
-      {variable:'--border-subtle', label:'Границы мягкие', description:'Рамки и разделители.', defaultConfig:()=>({mode:'base', ref:'--neutral'})},
-      {variable:'--action-primary', label:'Primary action', description:'Основной CTA.', defaultConfig:()=>({mode:'base', ref:'--button'})},
-      {variable:'--action-primary-hover', label:'Primary hover', description:'Hover/active для CTA.', defaultConfig:()=>({mode:'base', ref:'--button-hover'})},
-      {variable:'--badge-accent', label:'Цвет бейджа', description:'Теги и небольшие акценты.', defaultConfig:()=>({mode:'base', ref:'--warm'})}
+      {variable:'--surface-primary', label:'Поверхность основная', description:'Главный фон интерфейса.', defaultConfig:()=>({mode:'base', ref:'--color-base'})},
+      {variable:'--surface-card', label:'Поверхность карточек', description:'Карточки и блоки.', defaultConfig:()=>({mode:'auto'}), auto:(base)=>mixColors(base['--color-base'], '#FFFFFF', 0.15)},
+      {variable:'--surface-muted', label:'Поверхность приглушённая', description:'Вторичные подложки.', defaultConfig:()=>({mode:'auto'}), auto:(base)=>mixColors(base['--color-secondary'], '#FFFFFF', 0.65)},
+      {variable:'--surface-hero', label:'Hero-поверхность', description:'Градиенты и крупные баннеры.', defaultConfig:()=>({mode:'auto'}), auto:(base)=>mixColors(base['--color-secondary'], base['--color-accent'], 0.4)},
+      {variable:'--surface-accent', label:'Акцентная поверхность', description:'Выделенные блоки.', defaultConfig:()=>({mode:'auto'}), auto:(base)=>mixColors(base['--color-secondary'], base['--color-neutral'], 0.3)},
+      {variable:'--text-strong', label:'Текст сильный', description:'Основной текст и заголовки.', defaultConfig:()=>({mode:'base', ref:'--color-neutral'})},
+      {variable:'--text-muted', label:'Текст вторичный', description:'Подписи и пояснения.', defaultConfig:()=>({mode:'auto'}), auto:(base, alias)=>mixColors(base['--color-neutral'], alias['--surface-primary'] || base['--color-base'], 0.42)},
+      {variable:'--border-subtle', label:'Границы мягкие', description:'Рамки и разделители.', defaultConfig:()=>({mode:'auto'}), auto:(base)=>mixColors(base['--color-secondary'], base['--color-neutral'], 0.12)},
+      {variable:'--action-primary', label:'Primary action', description:'Основной CTA.', defaultConfig:()=>({mode:'auto'}), auto:(base)=>mixColors(base['--color-accent'], base['--color-neutral'], 0.18)},
+      {variable:'--action-primary-hover', label:'Primary hover', description:'Hover/active для CTA.', defaultConfig:()=>({mode:'auto'}), auto:(base, alias)=>mixColors(alias['--action-primary'] || mixColors(base['--color-accent'], base['--color-neutral'], 0.18), '#FFFFFF', 0.08)},
+      {variable:'--badge-accent', label:'Цвет бейджа', description:'Теги и небольшие акценты.', defaultConfig:()=>({mode:'auto'}), auto:(base)=>mixColors(base['--color-secondary'], '#FFFFFF', 0.45)}
     ];
-
     const DEFAULT_PROFILES = [
       {
-        id:'soft-light',
-        name:'Нейтральный старт',
+        id:'balanced-mauve',
+        name:'Нейтральный баланс',
         base:Object.fromEntries(BASE_TOKENS.map(t=>[t.variable,t.default])),
-        aliases:{}
+        aliases:{},
       },
       {
-        id:'evening-contrast',
-        name:'Вечерний контраст',
+        id:'twilight-gold',
+        name:'Сумеречный контраст',
         base:{
-          '--bg':'#181921',
-          '--text':'#FFFFFF',
-          '--accent1':'#2E6AFF',
-          '--accent2':'#7A5CFF',
-          '--warm':'#F2B5A0',
-          '--warm2':'#1F2330',
-          '--button':'#4250FF',
-          '--button-hover':'#5C6CFF',
-          '--neutral':'#2C3344',
-          '--card-bg':'#1F2533'
+          '--color-base':'#1C1B23',
+          '--color-secondary':'#2D2535',
+          '--color-accent':'#E7A04E',
+          '--color-neutral':'#F4F1FF'
         },
-        aliases:{
-          '--surface-muted':{mode:'base', ref:'--neutral'},
-          '--text-muted':{mode:'auto'},
-          '--badge-accent':{mode:'base', ref:'--warm'}
-        }
+        aliases:{},
       }
     ];
-
-    const DEFAULT_STATE = {activeId:'soft-light', profiles:DEFAULT_PROFILES};
+    const DEFAULT_STATE = {activeId:'balanced-mauve', profiles:DEFAULT_PROFILES};
 
     const LEGACY_FONT_OPTIONS = [
       {id:'manrope', label:'Manrope', stack:"'Manrope', sans-serif", link:'https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap&subset=cyrillic'},
@@ -488,14 +467,14 @@
     function renderDistribution(){
       if(!ratioSegments.length) return;
       const mapping = {
-        primary: getVar('--surface-primary') || getVar('--bg'),
-        secondary: getVar('--surface-muted') || getVar('--accent1'),
-        accent: getVar('--action-primary') || getVar('--button')
+        primary: getVar('--ratio-primary') || getVar('--surface-primary'),
+        secondary: getVar('--ratio-secondary') || getVar('--surface-muted'),
+        accent: getVar('--ratio-accent') || getVar('--action-primary')
       };
       const flexMap = {primary:6, secondary:3, accent:1};
       ratioSegments.forEach(segment=>{
         const key = segment.dataset.indexRatio;
-        const color = mapping[key] || '#CCCCCC';
+        const color = mapping[key] || getVar('--surface-card') || '#CCCCCC';
         const weight = flexMap[key] || 1;
         segment.style.flex = `${weight} ${weight} 0`;
         segment.style.background = color;
@@ -505,7 +484,7 @@
       });
       ratioDots.forEach(dot=>{
         const key = dot.dataset.indexDot;
-        const color = mapping[key] || '#CCCCCC';
+        const color = mapping[key] || getVar('--surface-card') || '#CCCCCC';
         dot.style.background = color;
         dot.style.borderColor = pickReadable(color);
       });
