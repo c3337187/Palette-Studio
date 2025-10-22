@@ -348,6 +348,12 @@
       ui:'UI элементы'
     };
 
+    const ROLE_GUIDE = {
+      heading:'Роль: H1–H4, hero-заголовки и крупные CTA. Требования: выразительное начертание с поддержкой кириллицы, веса 600–800 для акцентов, допустимо лёгкое брендирование.',
+      text:'Роль: параграфы, описания, длинный контент. Требования: высокая читабельность при кегле 14–18 px, веса 400–500, умеренный контраст штрихов.',
+      ui:'Роль: кнопки, навигация, бейджи и метки. Требования: устойчивое начертание, хорошо смотрится в верхнем регистре, веса 500–700, чёткие цифры и символы.'
+    };
+
     const FONT_REGISTRY = {};
     RAW_FONTS.forEach(registerFont);
 
@@ -563,16 +569,20 @@
     }
 
     function updateMeta(){
-      headingMeta.textContent = describeFont(fonts.heading);
-      bodyMeta.textContent = describeFont(fonts.text);
-      uiMeta.textContent = describeFont(fonts.ui);
+      headingMeta.textContent = describeFont('heading', fonts.heading);
+      headingMeta.title = ROLE_GUIDE.heading;
+      bodyMeta.textContent = describeFont('text', fonts.text);
+      bodyMeta.title = ROLE_GUIDE.text;
+      uiMeta.textContent = describeFont('ui', fonts.ui);
+      uiMeta.title = ROLE_GUIDE.ui;
     }
 
-    function describeFont(id){
+    function describeFont(role, id){
       const font = FONT_REGISTRY[id];
-      if(!font) return id;
+      const guide = ROLE_GUIDE[role] || '';
+      if(!font) return guide ? `${id}. ${guide}` : id;
       const label = CATEGORY_LABELS[font.category] || font.category;
-      return `${font.family} • ${label}`;
+      return guide ? `${font.family} • ${label}. ${guide}` : `${font.family} • ${label}`;
     }
 
     function showStatus(text){
