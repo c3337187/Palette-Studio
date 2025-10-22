@@ -6,27 +6,24 @@
   <title>Цветовая лаборатория</title>
   <style>
     :root{
-      --bg:#FAF8FB;
-      --text:#3C2E40;
-      --accent1:#B188C2;
-      --accent2:#C9A3E6;
-      --warm:#EBC5D8;
-      --warm2:#F3DEE6;
-      --button:#8C66AF;
-      --button-hover:#A57FD0;
-      --neutral:#E9E5EC;
-      --card-bg:#FFFFFF;
-      --surface-primary:var(--bg);
-      --surface-card:var(--card-bg);
-      --surface-muted:var(--warm2);
-      --surface-hero:var(--accent2);
-      --surface-accent:var(--accent1);
-      --text-strong:var(--text);
-      --text-muted:color-mix(in srgb,var(--text) 60%,var(--surface-primary) 40%);
-      --border-subtle:var(--neutral);
-      --action-primary:var(--button);
-      --action-primary-hover:var(--button-hover);
-      --badge-accent:var(--warm);
+      --color-base:#F5F3FA;
+      --color-secondary:#D6CFFE;
+      --color-accent:#FFB870;
+      --color-neutral:#2F2537;
+      --surface-primary:var(--color-base);
+      --surface-card:color-mix(in srgb,var(--color-base) 85%, white 15%);
+      --surface-muted:color-mix(in srgb,var(--color-secondary) 35%, white);
+      --surface-hero:color-mix(in srgb,var(--color-secondary) 60%, var(--color-accent));
+      --surface-accent:color-mix(in srgb,var(--color-secondary) 70%, var(--color-neutral));
+      --text-strong:var(--color-neutral);
+      --text-muted:color-mix(in srgb,var(--color-neutral) 58%, var(--surface-primary) 42%);
+      --border-subtle:color-mix(in srgb,var(--color-secondary) 24%, var(--color-neutral));
+      --action-primary:color-mix(in srgb,var(--color-accent) 82%, var(--color-neutral));
+      --action-primary-hover:color-mix(in srgb,var(--color-accent) 92%, white 8%);
+      --badge-accent:color-mix(in srgb,var(--color-secondary) 55%, white);
+      --ratio-primary:var(--surface-primary);
+      --ratio-secondary:var(--surface-muted);
+      --ratio-accent:var(--action-primary);
       --font-heading:'Manrope', 'Inter', 'Segoe UI', system-ui, sans-serif;
       --font-body:'Inter', 'Segoe UI', system-ui, sans-serif;
       --font-ui:'Manrope', 'Inter', 'Segoe UI', system-ui, sans-serif;
@@ -36,7 +33,7 @@
     a{text-decoration:none;color:inherit}
     .topbar{background:rgba(255,255,255,0.85);backdrop-filter:blur(14px);border-bottom:1px solid rgba(0,0,0,0.06);position:sticky;top:0;z-index:10}
     .topbar .container{max-width:1200px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px}
-    .brand{font-weight:700;font-size:18px;letter-spacing:0.06em;text-transform:uppercase;color:#5C4C66}
+    .brand{font-weight:700;font-size:18px;letter-spacing:0.06em;text-transform:uppercase;color:color-mix(in srgb,var(--color-neutral) 85%, white 15%)}
     .nav-links{display:flex;gap:12px;font-size:14px}
     .nav-link{padding:8px 14px;border-radius:999px;color:var(--text-muted);transition:background .2s,color .2s}
     .nav-link:hover{background:var(--surface-muted);color:var(--text-strong)}
@@ -55,41 +52,41 @@
     .tab-panel.active{display:block}
     .profile-head{display:flex;flex-direction:column;gap:12px}
     .profile-select{display:flex;flex-direction:column;gap:10px}
-    .profile-select select{width:100%;padding:10px 12px;border-radius:12px;border:1px solid rgba(0,0,0,0.12);font-size:14px;background:#fff;color:#43374B}
+    .profile-select select{width:100%;padding:10px 12px;border-radius:12px;border:1px solid rgba(0,0,0,0.12);font-size:14px;background:#fff;color:var(--text-strong)}
     .profile-actions{display:flex;flex-wrap:wrap;gap:8px}
     .btn{padding:8px 12px;border-radius:12px;border:1px solid var(--border-subtle);background:var(--surface-card);color:var(--text-strong);font-size:13px;font-family:var(--font-ui);cursor:pointer;transition:background .2s,box-shadow .2s}
     .btn:hover{background:var(--surface-muted)}
-    .btn.danger{background:#F7E4EA;border-color:#F0B9C8;color:#A63E59}
+    .btn.danger{background:color-mix(in srgb,var(--color-accent) 18%, white);border-color:color-mix(in srgb,var(--color-accent) 28%, white);color:color-mix(in srgb,var(--color-accent) 60%, var(--color-neutral) 40%)}
     .status{font-size:12px;color:var(--text-muted)}
     .token-controls{display:flex;flex-direction:column;gap:0}
     .token-row{display:grid;grid-template-columns:150px 1fr;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(0,0,0,0.05)}
     .token-row:last-child{border-bottom:none}
     .token-label{display:flex;flex-direction:column;gap:4px}
-    .token-label .name{font-size:13px;font-weight:600;color:#43374B}
-    .token-label .var{font-family:monospace;font-size:11px;color:#a18cb2}
+    .token-label .name{font-size:13px;font-weight:600;color:var(--text-strong)}
+    .token-label .var{font-family:monospace;font-size:11px;color:color-mix(in srgb,var(--color-secondary) 55%, var(--color-neutral) 45%)}
     .token-inputs{display:flex;gap:8px;align-items:center}
     .token-inputs input[type="color"]{width:40px;height:36px;border:none;background:none;padding:0;cursor:pointer}
-    .token-inputs input[type="text"]{width:96px;padding:6px 8px;border-radius:8px;border:1px solid rgba(0,0,0,0.12);font-family:monospace;text-transform:uppercase;font-size:13px;color:#43374B}
-    .token-inputs input[type="text"].invalid{border-color:#d16c88;box-shadow:0 0 0 2px rgba(209,108,136,0.25)}
+    .token-inputs input[type="text"]{width:96px;padding:6px 8px;border-radius:8px;border:1px solid rgba(0,0,0,0.12);font-family:monospace;text-transform:uppercase;font-size:13px;color:var(--text-strong)}
+    .token-inputs input[type="text"].invalid{border-color:color-mix(in srgb,var(--color-accent) 45%, var(--color-neutral) 55%);box-shadow:0 0 0 2px color-mix(in srgb,var(--color-accent) 30%, transparent)}
     .alias-controls{display:flex;flex-direction:column}
     .alias-row{display:grid;grid-template-columns:150px 1fr 56px;align-items:start;gap:12px;padding:10px 0;border-bottom:1px solid rgba(0,0,0,0.05)}
     .alias-row:last-child{border-bottom:none}
     .alias-label{display:flex;flex-direction:column;gap:4px}
-    .alias-label .name{font-size:13px;font-weight:600;color:#43374B}
-    .alias-label .var{font-family:monospace;font-size:11px;color:#a18cb2}
+    .alias-label .name{font-size:13px;font-weight:600;color:var(--text-strong)}
+    .alias-label .var{font-family:monospace;font-size:11px;color:color-mix(in srgb,var(--color-secondary) 55%, var(--color-neutral) 45%)}
     .alias-control{display:flex;flex-direction:column;gap:8px}
-    .alias-control select{width:100%;padding:8px 12px;border-radius:10px;border:1px solid rgba(0,0,0,0.12);font-size:13px;background:#fff;color:#43374B}
+    .alias-control select{width:100%;padding:8px 12px;border-radius:10px;border:1px solid rgba(0,0,0,0.12);font-size:13px;background:#fff;color:var(--text-strong)}
     .alias-custom{display:flex;gap:8px;align-items:center}
     .alias-custom input[type="color"]{width:36px;height:32px;border:none;padding:0;cursor:pointer;background:none}
     .alias-custom input[type="text"]{width:90px;padding:6px 8px;border-radius:8px;border:1px solid rgba(0,0,0,0.12);font-family:monospace;text-transform:uppercase;font-size:13px}
-    .alias-custom input[type="text"].invalid{border-color:#d16c88;box-shadow:0 0 0 2px rgba(209,108,136,0.25)}
+    .alias-custom input[type="text"].invalid{border-color:color-mix(in srgb,var(--color-accent) 45%, var(--color-neutral) 55%);box-shadow:0 0 0 2px color-mix(in srgb,var(--color-accent) 30%, transparent)}
     .alias-preview{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12px;color:var(--text-muted)}
     .alias-preview .swatch{width:48px;height:48px;border-radius:12px;border:1px solid rgba(0,0,0,0.05)}
     .actions{display:flex;flex-wrap:wrap;gap:8px}
     .generator-form{display:flex;flex-direction:column;gap:14px}
     .generator-row{display:flex;gap:10px;align-items:center}
     .generator-row input[type="text"]{flex:1;padding:8px 10px;border-radius:10px;border:1px solid rgba(0,0,0,0.12);font-size:13px;font-family:var(--font-ui)}
-    .generator-row input[type="text"].invalid{border-color:#d16c88;box-shadow:0 0 0 2px rgba(209,108,136,0.25)}
+    .generator-row input[type="text"].invalid{border-color:color-mix(in srgb,var(--color-accent) 45%, var(--color-neutral) 55%);box-shadow:0 0 0 2px color-mix(in srgb,var(--color-accent) 30%, transparent)}
     .generator-row input[type="color"]{width:40px;height:36px;border:none;background:none;padding:0;cursor:pointer}
     .generator-actions{display:flex;gap:10px;flex-wrap:wrap}
     .generator-status{font-size:12px;color:var(--text-muted);min-height:16px}
@@ -103,16 +100,16 @@
     .contrast-card p{margin:0;font-size:12px;color:var(--text-muted);line-height:1.5}
     .contrast-list{display:flex;flex-direction:column;gap:8px;font-size:13px}
     .contrast-item{display:flex;flex-direction:column;gap:8px;padding:10px 12px;border-radius:12px;background:var(--surface-muted);border:1px solid rgba(0,0,0,0.05);transition:border .2s,box-shadow .2s}
-    .contrast-item.pass{border-color:rgba(74,149,97,0.4);box-shadow:0 8px 18px rgba(74,149,97,0.08)}
-    .contrast-item.warn{border-color:rgba(238,165,61,0.4);box-shadow:0 6px 16px rgba(238,165,61,0.06)}
-    .contrast-item.fail{border-color:rgba(212,91,91,0.4);box-shadow:0 6px 14px rgba(212,91,91,0.08)}
+    .contrast-item.pass{border-color:color-mix(in srgb,var(--color-secondary) 45%, var(--color-neutral) 15%);box-shadow:0 8px 18px color-mix(in srgb,var(--color-secondary) 25%, transparent)}
+    .contrast-item.warn{border-color:color-mix(in srgb,var(--color-accent) 45%, var(--color-secondary) 15%);box-shadow:0 6px 16px color-mix(in srgb,var(--color-accent) 20%, transparent)}
+    .contrast-item.fail{border-color:color-mix(in srgb,var(--color-accent) 60%, var(--color-neutral) 20%);box-shadow:0 6px 14px color-mix(in srgb,var(--color-accent) 25%, transparent)}
     .contrast-item .combo{display:flex;justify-content:space-between;align-items:center;gap:12px}
     .contrast-item .combo .swatch{width:52px;height:32px;border-radius:8px;border:1px solid rgba(0,0,0,0.06);display:flex;align-items:center;justify-content:center;font-weight:700;font-family:var(--font-ui)}
     .contrast-item .ratio{font-family:monospace;font-weight:600}
     .contrast-item .badge{padding:4px 8px;border-radius:999px;font-size:11px;font-weight:600}
-    .contrast-item.pass .badge{background:rgba(74,149,97,0.15);color:#2E6B43}
-    .contrast-item.warn .badge{background:rgba(238,165,61,0.18);color:#8C4F00}
-    .contrast-item.fail .badge{background:rgba(212,91,91,0.18);color:#7C1F1F}
+    .contrast-item.pass .badge{background:color-mix(in srgb,var(--color-secondary) 35%, white);color:color-mix(in srgb,var(--color-secondary) 72%, var(--color-neutral) 28%)}
+    .contrast-item.warn .badge{background:color-mix(in srgb,var(--color-accent) 32%, white);color:color-mix(in srgb,var(--color-accent) 70%, var(--color-neutral) 30%)}
+    .contrast-item.fail .badge{background:color-mix(in srgb,var(--color-accent) 48%, var(--color-neutral));color:color-mix(in srgb,var(--color-accent) 78%, var(--color-neutral) 22%)}
     .contrast-item .guide{font-size:11px;color:var(--text-muted)}
     .preview-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
     .preview-panel{background:var(--surface-card);border-radius:18px;padding:20px;border:1px solid rgba(54,38,70,0.08);box-shadow:0 12px 34px rgba(54,38,70,0.1);display:flex;flex-direction:column;gap:14px}
@@ -178,7 +175,7 @@
           <p>Создавайте, копируйте и настраивайте цветовые профили. Изменения сохраняются автоматически.</p>
         </div>
         <div class="profile-select">
-          <label style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#5C4C66">Активный профиль</label>
+          <label style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:color-mix(in srgb,var(--color-neutral) 85%, white 15%)">Активный профиль</label>
           <select id="profileSelect"></select>
         </div>
         <div class="profile-actions">
@@ -200,8 +197,8 @@
         </div>
         <div class="generator-form" id="generatorForm">
           <div class="generator-row">
-            <input type="color" id="generatorColor" value="#6B5B95" aria-label="Основной цвет" />
-            <input type="text" id="generatorHex" value="#6B5B95" placeholder="#RRGGBB" aria-label="HEX основного цвета" />
+            <input type="color" id="generatorColor" value="#FFB870" aria-label="Основной цвет" />
+            <input type="text" id="generatorHex" value="#FFB870" placeholder="#RRGGBB" aria-label="HEX основного цвета" />
           </div>
           <input type="text" id="generatorName" placeholder="Название нового профиля" aria-label="Название профиля" />
           <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-muted)">
@@ -360,69 +357,26 @@
 
   <div class="notice" id="notice"></div>
   <input type="file" id="importInput" accept="application/json" hidden />
+  <script src="palette-store.js"></script>
   <script src="palette-generator.js"></script>
   <script>
-    const STORAGE_KEY = 'palette-studio-profiles';
     const FONT_KEY = 'palette-studio-fonts';
 
-    const BASE_TOKENS = [
-      {variable:'--bg', label:'Фон', default:'#FAF8FB'},
-      {variable:'--text', label:'Основной текст', default:'#3C2E40'},
-      {variable:'--accent1', label:'Акцент мягкий', default:'#B188C2'},
-      {variable:'--accent2', label:'Акцент яркий', default:'#C9A3E6'},
-      {variable:'--warm', label:'Тёплый акцент', default:'#EBC5D8'},
-      {variable:'--warm2', label:'Доп. тёплый', default:'#F3DEE6'},
-      {variable:'--button', label:'Кнопка', default:'#8C66AF'},
-      {variable:'--button-hover', label:'Кнопка (hover)', default:'#A57FD0'},
-      {variable:'--neutral', label:'Нейтральный', default:'#E9E5EC'},
-      {variable:'--card-bg', label:'Фон карточек', default:'#FFFFFF'}
-    ];
+    const {
+      BASE_TOKENS,
+      ALIAS_DEFS,
+      loadState,
+      saveState: persistState,
+      resolveAliases,
+      applyPalette,
+      mixColors,
+      normalizeHex,
+      normalizeProfile,
+      randomId,
+      clone
+    } = PaletteStore;
 
-    const ALIAS_DEFS = [
-      {variable:'--surface-primary', label:'Поверхность основная', defaultConfig:()=>({mode:'base', ref:'--bg'})},
-      {variable:'--surface-card', label:'Поверхность карточек', defaultConfig:()=>({mode:'base', ref:'--card-bg'})},
-      {variable:'--surface-muted', label:'Поверхность приглушённая', defaultConfig:()=>({mode:'base', ref:'--warm2'})},
-      {variable:'--surface-hero', label:'Hero-поверхность', defaultConfig:()=>({mode:'base', ref:'--accent2'})},
-      {variable:'--surface-accent', label:'Акцентная поверхность', defaultConfig:()=>({mode:'base', ref:'--accent1'})},
-      {variable:'--text-strong', label:'Текст сильный', defaultConfig:()=>({mode:'base', ref:'--text'})},
-      {variable:'--text-muted', label:'Текст вторичный', defaultConfig:()=>({mode:'auto'}), auto:(base, alias)=>computeMutedTextColor(base, alias)},
-      {variable:'--border-subtle', label:'Границы мягкие', defaultConfig:()=>({mode:'base', ref:'--neutral'})},
-      {variable:'--action-primary', label:'Primary action', defaultConfig:()=>({mode:'base', ref:'--button'})},
-      {variable:'--action-primary-hover', label:'Primary hover', defaultConfig:()=>({mode:'base', ref:'--button-hover'})},
-      {variable:'--badge-accent', label:'Цвет бейджа', defaultConfig:()=>({mode:'base', ref:'--warm'})}
-    ];
-
-    const DEFAULT_PROFILES = [
-      {
-        id:'soft-light',
-        name:'Нейтральный старт',
-        base:Object.fromEntries(BASE_TOKENS.map(t=>[t.variable,t.default])),
-        aliases:{}
-      },
-      {
-        id:'evening-contrast',
-        name:'Вечерний контраст',
-        base:{
-          '--bg':'#181921',
-          '--text':'#FFFFFF',
-          '--accent1':'#2E6AFF',
-          '--accent2':'#7A5CFF',
-          '--warm':'#F2B5A0',
-          '--warm2':'#1F2330',
-          '--button':'#4250FF',
-          '--button-hover':'#5C6CFF',
-          '--neutral':'#2C3344',
-          '--card-bg':'#1F2533'
-        },
-        aliases:{
-          '--surface-muted':{mode:'base', ref:'--neutral'},
-          '--text-muted':{mode:'auto'},
-          '--badge-accent':{mode:'base', ref:'--warm'}
-        }
-      }
-    ];
-
-    const DEFAULT_STATE = {activeId:'soft-light', profiles:DEFAULT_PROFILES};
+    const cloneProfile = profile => clone(profile);
 
     const LEGACY_FONT_OPTIONS = [
       {id:'manrope', label:'Manrope', stack:"'Manrope', sans-serif", link:'https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap&subset=cyrillic'},
@@ -876,7 +830,7 @@
         return;
       }
       const {generatePalette} = window.PaletteGenerator;
-      const initial = normalizeHex(generatorHex.value || generatorColor.value) || '#6B5B95';
+      const initial = normalizeHex(generatorHex.value || generatorColor.value) || '#FFB870';
       generatorHex.value = initial;
       generatorColor.value = initial.toLowerCase();
 
@@ -961,14 +915,14 @@
       if(!ratioSegments.length) return;
       const resolved = resolveAliases(activeProfile);
       const mapping = {
-        primary: resolved['--surface-primary'] || activeProfile.base['--bg'],
-        secondary: resolved['--surface-muted'] || activeProfile.base['--accent1'],
-        accent: resolved['--action-primary'] || activeProfile.base['--button']
+        primary: resolved['--surface-primary'] || activeProfile.base['--color-base'],
+        secondary: resolved['--surface-muted'] || activeProfile.base['--color-secondary'],
+        accent: resolved['--action-primary'] || mixColors(activeProfile.base['--color-accent'], activeProfile.base['--color-neutral'], 0.18)
       };
       const flexMap = {primary:6, secondary:3, accent:1};
       ratioSegments.forEach(segment=>{
         const key = segment.dataset.ratio;
-        const color = mapping[key] || '#CCCCCC';
+        const color = mapping[key] || activeProfile.base['--color-base'] || '#CCCCCC';
         const weight = flexMap[key] || 1;
         segment.style.flex = `${weight} ${weight} 0`;
         segment.style.background = color;
@@ -978,7 +932,7 @@
       });
       ratioDots.forEach(dot=>{
         const key = dot.dataset.ratioDot;
-        const color = mapping[key] || '#CCCCCC';
+        const color = mapping[key] || activeProfile.base['--color-base'] || '#CCCCCC';
         dot.style.background = color;
         dot.style.borderColor = getReadableTextColor(color);
       });
@@ -1061,64 +1015,7 @@
     }
 
     function saveState(){
-      const payload = {
-        activeId: state.activeId,
-        profiles: serializeProfiles()
-      };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
-    }
-
-    function serializeProfiles(){
-      return state.profiles.map(profile=>({
-        id: profile.id,
-        name: profile.name,
-        base: profile.base,
-        aliases: profile.aliases
-      }));
-    }
-
-    function loadState(){
-      const fallback = structuredClone(DEFAULT_STATE);
-      try{
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if(!raw) return hydrateState(fallback);
-        const parsed = JSON.parse(raw);
-        if(!parsed || !Array.isArray(parsed.profiles)) return hydrateState(fallback);
-        const hydrated = hydrateState(parsed);
-        if(!hydrated.profiles.find(p=>p.id===hydrated.activeId)) hydrated.activeId = hydrated.profiles[0]?.id || fallback.activeId;
-        return hydrated;
-      }catch(e){
-        return hydrateState(fallback);
-      }
-    }
-
-    function hydrateState(state){
-      return {
-        activeId: state.activeId || state.profiles[0]?.id || 'soft-light',
-        profiles: (state.profiles || []).map(normalizeProfile)
-      };
-    }
-
-    function normalizeProfile(profile){
-      const base = {};
-      BASE_TOKENS.forEach(token=>{
-        const value = profile.base?.[token.variable] || token.default;
-        base[token.variable] = normalizeHex(value) || token.default;
-      });
-      const aliases = {};
-      ALIAS_DEFS.forEach(def=>{
-        const stored = profile.aliases?.[def.variable];
-        let config = stored && stored.mode ? {...stored} : def.defaultConfig();
-        if(config.mode==='base' && !BASE_TOKENS.find(t=>t.variable===config.ref)){
-          config = def.defaultConfig();
-        }
-        if(config.mode==='custom'){
-          config.value = normalizeHex(config.value || '');
-          if(!config.value) config = def.defaultConfig();
-        }
-        aliases[def.variable] = config;
-      });
-      return {id: profile.id || randomId(), name: profile.name || 'Безымянный профиль', base, aliases};
+      state = persistState(state);
     }
 
     function buildProfileFromGenerated(result, name){
@@ -1139,34 +1036,6 @@
       return `${prefix} ${suffix}`;
     }
 
-    function resolveAliases(profile){
-      const aliasColors = {};
-      ALIAS_DEFS.forEach(def=>{
-        const config = profile.aliases?.[def.variable] || def.defaultConfig();
-        let color;
-        if(config.mode==='base'){
-          color = profile.base[config.ref];
-        }else if(config.mode==='custom'){
-          color = config.value;
-        }else if(config.mode==='auto' && typeof def.auto==='function'){
-          color = def.auto(profile.base, aliasColors, config);
-        }
-        if(!color){
-          const fallbackRef = def.defaultConfig().ref;
-          color = fallbackRef ? profile.base[fallbackRef] : '#000000';
-        }
-        aliasColors[def.variable] = color;
-      });
-      return aliasColors;
-    }
-
-    function applyPalette(profile){
-      const root = document.documentElement;
-      Object.entries(profile.base).forEach(([key,value])=>root.style.setProperty(key,value));
-      const aliases = resolveAliases(profile);
-      Object.entries(aliases).forEach(([key,value])=>root.style.setProperty(key,value));
-    }
-
     function buildCssSnippet(profile){
       const aliases = resolveAliases(profile);
       const lines = [
@@ -1184,6 +1053,10 @@
       const fontsPayload = getFontExportPayload();
       if(fontsPayload) payload.fonts = fontsPayload;
       return payload;
+    }
+
+    function serializeProfiles(){
+      return state.profiles.map(profile=>cloneProfile(profile));
     }
 
     function getFontExportPayload(){
@@ -1262,24 +1135,11 @@
     }
 
     function computeMutedTextColor(baseTokens, aliasTokens){
-      const baseText = normalizeHex(baseTokens['--text']) || '#000000';
-      const background = normalizeHex(aliasTokens['--surface-primary'] || baseTokens['--bg']) || '#FFFFFF';
+      const baseText = normalizeHex(baseTokens['--color-neutral']) || '#000000';
+      const background = normalizeHex(aliasTokens['--surface-primary'] || baseTokens['--color-base']) || '#FFFFFF';
       // Оттеняем основной цвет за счёт фона — без искусственного повышения контраста,
       // чтобы диагностика оставалась честной и совпадала с реальными HEX-значениями профиля.
-      return mixColors(baseText, background, 0.35);
-    }
-
-    function mixColors(hexA, hexB, weightB){
-      const a = parseHex(hexA || '#000000');
-      const b = parseHex(hexB || '#000000');
-      const wb = Number.isFinite(weightB) ? weightB : 0.5;
-      const wa = 1 - wb;
-      const mix = {
-        r:Math.round(a.r*wa + b.r*wb),
-        g:Math.round(a.g*wa + b.g*wb),
-        b:Math.round(a.b*wa + b.b*wb)
-      };
-      return rgbToHex(mix);
+      return mixColors(baseText, background, 0.42);
     }
 
     function parseHex(hex){
@@ -1298,25 +1158,6 @@
       }).join('');
     }
 
-    function normalizeHex(value){
-      if(!value) return '';
-      let hex = String(value).trim();
-      if(hex.startsWith('#')) hex = hex.slice(1);
-      if(hex.length===3){
-        hex = hex.split('').map(ch=>ch+ch).join('');
-      }
-      if(!/^[0-9a-fA-F]{6}$/.test(hex)) return '';
-      return '#'+hex.toUpperCase();
-    }
-
-    function randomId(){
-      return 'id-'+Math.random().toString(36).slice(2,8);
-    }
-
-    function cloneProfile(profile){
-      return JSON.parse(JSON.stringify(profile));
-    }
-
     function generateUniqueId(preferred){
       const cleaned = preferred && typeof preferred === 'string'
         ? preferred.trim().replace(/[^a-zA-Z0-9_-]+/g,'-').replace(/-+/g,'-').replace(/^-|-$/g,'')
@@ -1333,10 +1174,6 @@
       const base = name && String(name).trim() ? String(name).trim() : 'Импортированный профиль';
       if(base.toLowerCase().includes('импорт')) return base;
       return `${base} (импорт)`;
-    }
-
-    function structuredClone(obj){
-      return JSON.parse(JSON.stringify(obj));
     }
 
     function calculateContrast(fg, bg){
