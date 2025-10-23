@@ -1,0 +1,103 @@
+{
+  "name": "Woodmart Sample Profile",
+  "generatedAt": "2024-05-01T00:00:00.000Z",
+  "woodmart": {
+    "header": {
+      "color": "rgb(34, 34, 34)"
+    },
+    "footer": {
+      "color": "rgb(24, 24, 24)"
+    },
+    "typography": {
+      "basic": {
+        "fontFamily": "Inter",
+        "style": "Regular 400",
+        "type": "Cyrillic",
+        "fontSize": "16px",
+        "color": "rgb(34, 34, 34)"
+      },
+      "title": {
+        "fontFamily": "Playfair Display",
+        "style": "SemiBold 600",
+        "type": "Cyrillic",
+        "textTransform": "none",
+        "color": "rgb(34, 34, 34)"
+      },
+      "entities": {
+        "fontFamily": "Inter",
+        "style": "SemiBold 600",
+        "type": "Cyrillic",
+        "textTransform": "none",
+        "color": "rgb(34, 34, 34)",
+        "hoverColor": "rgb(192, 103, 255)"
+      },
+      "secondary": {
+        "fontFamily": "Montserrat",
+        "style": "Medium 500",
+        "type": "Cyrillic"
+      },
+      "widget": {
+        "fontFamily": "Inter",
+        "style": "SemiBold 600",
+        "type": "Cyrillic",
+        "textTransform": "uppercase",
+        "fontSize": "14px",
+        "color": "rgb(34, 34, 34)"
+      },
+      "header": {
+        "fontFamily": "Inter",
+        "style": "Medium 500",
+        "type": "Cyrillic",
+        "textTransform": "uppercase",
+        "fontSize": "13px"
+      }
+    },
+    "colors": {
+      "primary": "rgb(192, 103, 255)",
+      "secondary": "rgb(87, 125, 255)"
+    },
+    "backgrounds": {
+      "pages": {
+        "all": "rgb(245, 245, 247)"
+      },
+      "shop": {
+        "archive": "rgb(255, 255, 255)",
+        "single": "rgb(250, 250, 252)"
+      },
+      "blog": {
+        "archive": "rgb(255, 255, 255)",
+        "single": "rgb(250, 250, 252)"
+      }
+    },
+    "buttons": {
+      "default": {
+        "fontFamily": "Inter",
+        "style": "SemiBold 600",
+        "textTransform": "uppercase",
+        "background": "rgb(192, 103, 255)",
+        "hoverBackground": "rgb(173, 86, 236)"
+      },
+      "accent": {
+        "fontFamily": "Playfair Display",
+        "style": "SemiBold 600",
+        "textTransform": "none",
+        "background": "rgb(34, 34, 34)",
+        "hoverBackground": "rgb(55, 55, 55)"
+      }
+    },
+    "links": {
+      "color": {
+        "regular": "rgb(129, 119, 142)",
+        "hover": "rgb(192, 103, 255)"
+      },
+      "underline": {
+        "regular": "solid",
+        "hover": "solid"
+      },
+      "underlineColor": {
+        "regular": "rgb(192, 103, 255)",
+        "hover": "rgb(129, 119, 142)"
+      }
+    }
+  }
+}
